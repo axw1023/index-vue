@@ -6,8 +6,13 @@
       <div>
         <table>
           <tbody>
-          <tr v-for="(chunk, index) in chunks" :key="index">
-            <td v-for="item in chunk" :key="item.id">{{ item.subjectName }}</td>
+          <tr v-for="(subjectIPage, index) in chunks" :key="index">
+            <td v-for="subject in subjectIPage" :key="subject.id">
+              {{ subject.subjectName }}
+              <li v-for="link in subject.linkIPage.records" :key="link.id">
+                {{ link.linkName }}
+              </li>
+            </td>
           </tr>
           </tbody>
         </table>
