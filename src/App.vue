@@ -1,57 +1,57 @@
 <template>
-  <div>
-    <h1>Demo</h1>
-    <div v-if="loading">Loading...</div>
-    <ul v-if="!loading">
-      <div>
-        <table>
-          <tbody>
-          <tr v-for="(subjectIPage, index) in chunks" :key="index">
-            <td v-for="subject in subjectIPage" :key="subject.id">
-              {{ subject.subjectName }}
-              <li v-for="link in subject.linkIPage.records" :key="link.id">
-                {{ link.linkName }}
-              </li>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-    </ul>
+  <div class="app-main-div">
+    <div class="logo">
+      <router-link to="/">Go to Home</router-link>
+    </div>
+    <div class="subject-div">
+      <Subject/>
+    </div>
+    <div class="link-div">
+      <router-view :key="$route.fullPath" name="mainPage"></router-view>
+    </div>
   </div>
 </template>
 
 <script>
-import {fetchLinkList} from '@/api/link.js';
+import Subject from "./components/Subject.vue";
 
 export default {
   name: 'App',
-  data() {
-    return {
-      items: [],
-      loading: true,
-      //一行5列数据
-      columns: 5,
-    };
-  },
-  created() {
-    fetchLinkList().then((response) => {
-      this.items = response.data.records;
-      this.loading = false;
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-  },
-  computed: {
-    //按columns分组，达到换行效果
-    chunks() {
-      const result = []
-      for (let i = 0; i < this.items.length; i += this.columns) {
-        result.push(this.items.slice(i, i + this.columns))
-      }
-      return result
-    },
+  components: {
+    Subject
   },
 };
 </script>
+
+<style>
+.subject-div {
+  background-color: #86908A;
+  width: 20vw;
+  height: 100vh;
+  float: left;
+  display: flex;
+  justify-content: center; /*使用 flex 布局,水平居中对齐*/
+}
+
+.link-div {
+  background-color: #33a25f;
+  width: 70vw;
+  height: 100vh;
+  float: left;
+  display: flex;
+  justify-content: center; /*使用 flex 布局,水平居中对齐*/
+  position: relative; /*设置元素定位为相对定位，实现左右两个 div 可以各自上下滚动互不影响的效果。*/
+}
+
+/* 隐藏滚动条 */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* 隐藏页面滚动条,使整个页面不滚动 */
+body, html {
+  overflow: hidden;
+}
+
+
+</style>
