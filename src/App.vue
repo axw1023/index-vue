@@ -39,7 +39,6 @@ export default {
   height: 100vh;
   float: left;
   display: flex;
-  justify-content: center; /*使用 flex 布局,水平居中对齐*/
   position: relative; /*设置元素定位为相对定位，实现左右两个 div 可以各自上下滚动互不影响的效果。*/
 }
 

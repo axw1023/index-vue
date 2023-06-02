@@ -3,7 +3,7 @@
     <table>
       <tbody>
       <tr v-for="(subjectIPage, index) in chunks" :key="index">
-        <td v-for="subject in subjectIPage" :key="subject.id" @click="goToDetail(subject.id)">
+        <td v-for="subject in subjectIPage" :key="subject.id" @click="goToDetail(subject)">
           {{ subject.subjectName }}
         </td>
       </tr>
@@ -36,9 +36,9 @@ export default {
     });
   },
   methods: {
-    goToDetail(fnSubjectId) {
+    goToDetail(subject) {
       this.introduction = false;
-      this.$router.push({name: "Link", params: {fnSubjectId: fnSubjectId}});
+      this.$router.push({name: "Link", params: {fnSubjectId: subject.id},query:{fnSubjectName:subject.subjectName}});
     }
   },
   computed: {
