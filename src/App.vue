@@ -7,6 +7,7 @@
       <Subject/>
     </div>
     <div class="link-div">
+      <!--key变化时都会重新加载组件，并且不会产生缓存的问题-->
       <router-view :key="$route.fullPath" name="mainPage"></router-view>
     </div>
   </div>
