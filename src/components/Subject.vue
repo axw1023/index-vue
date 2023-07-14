@@ -58,4 +58,8 @@ export default {
 .subject-main-div {
   overflow: auto;
 }
+.subject-main-div td {
+  padding: 5px; /* 调整单元格的水平边距 */
+}
+
 </style>

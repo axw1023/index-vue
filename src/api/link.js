@@ -23,14 +23,18 @@ export function fetchLinkList(params) {
 
 // 点赞
 export function addLikeCount(id) {
-  return axios.get(`${BASE_URL}/like/count/add`, {
+  return axios.get(`${BASE_URL}/like/count/add/like`, {
     params: {
       id: id,
     },
   });
 }
 
-// 点反
-export function subtractLikeCount() {
-  return axios.get(`${BASE_URL}/like/count/subtract`);
+// 点踩
+export function disLikeCount(id) {
+  return axios.get(`${BASE_URL}/like/count/add/dislike`, {
+    params: {
+      id: id,
+    },
+  });
 }

@@ -17,8 +17,8 @@
             <a :href="link.linkUrl" target="_blank">{{ link.linkUrl }}</a>
           </td>
           <td>
-            <button @click="addLikeCount(link)">赞{{ link.likeCount }}</button>
-            <!--            <button @click="subtractLikeCount">反</button>-->
+            <button @click="addLikeCount(link)">👍{{ link.likeCount }}</button>
+            <button @click="addDisLikeCount(link)">👎{{ link.dislikeCount }}</button>
           </td>
         </tr>
         </tbody>
@@ -46,11 +46,17 @@
         </form>
       </div>
     </div>
+    <!-- 重复点击弹窗-->
+    <div>
+      <el-dialog :visible="dialogVisible">
+        <div>{{ responseContent }}</div>
+      </el-dialog>
+    </div>
   </div>
 </template>
 
 <script>
-import {addLikeCount, addLink, fetchLinkList} from "../api/link";
+import {addLikeCount, addLink, disLikeCount, fetchLinkList} from "../api/link";
 
 export default {
   name: "Link",
@@ -67,6 +73,7 @@ export default {
         linkExplain: '',
         fnSubjectId: '',
       },
+      dialogVisible: false
     };
   },
   created() {
@@ -84,7 +91,20 @@ export default {
     // 点赞
     addLikeCount(link) {
       addLikeCount(link.id).then((response) => {
+
         link.likeCount = response.data;
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 403) {
+          // Display popup with "重复提交" message
+          alert("重复提交");
+        }
+      });
+    },
+    // 点踩
+    addDisLikeCount(link) {
+      disLikeCount(link.id).then((response) => {
+        link.dislikeCount = response.data;
       })
     },
     //弹窗
@@ -136,6 +156,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: start;
+  display: none;
 }
 
 /*列表*/
@@ -184,6 +205,10 @@ form input {
 
 form button {
   margin-top: 10px;
+}
+
+table button {
+  margin-left: 10px;
 }
 
 </style>
