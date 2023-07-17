@@ -91,12 +91,10 @@ export default {
     // 点赞
     addLikeCount(link) {
       addLikeCount(link.id).then((response) => {
-
         link.likeCount = response.data;
       })
       .catch((error) => {
         if (error.response && error.response.status === 403) {
-          // Display popup with "重复提交" message
           alert("重复提交");
         }
       });
@@ -106,6 +104,11 @@ export default {
       disLikeCount(link.id).then((response) => {
         link.dislikeCount = response.data;
       })
+      .catch((error) => {
+        if (error.response && error.response.status === 403) {
+          alert("重复提交");
+        }
+      });
     },
     //弹窗
     openAddModal() {
