@@ -4,9 +4,10 @@
     <div class="table-div">
       <table>
         <colgroup>
-          <col style="background-color: #b0a070;width: 30%">
-          <col style="background-color: #1ba6a6;width: 50%">
-          <col style="background-color: #a333da;width: 20%">
+          <col style="background-color: #b0a070;width: 25%">
+          <col style="background-color: #1ba6a6;width: 40%">
+          <col style="background-color: #39a61b;width: 20%">
+          <col style="background-color: #a333da;width: 15%">
         </colgroup>
         <tbody>
         <tr v-for="(link, index) in items">
@@ -17,12 +18,18 @@
             <a :href="link.linkUrl" target="_blank">{{ link.linkUrl }}</a>
           </td>
           <td>
+            {{ link.createTime }}
+          </td>
+          <td>
             <button @click="addLikeCount(link)">👍{{ link.likeCount }}</button>
             <button @click="addDisLikeCount(link)">👎{{ link.dislikeCount }}</button>
           </td>
         </tr>
         </tbody>
       </table>
+    </div>
+    <div class="random-div">
+      <button @click="openAddModal">随机</button>
     </div>
     <div class="edit-div">
       <button @click="openAddModal">新增</button>
@@ -91,7 +98,7 @@ export default {
     // 点赞
     addLikeCount(link) {
       addLikeCount(link.id).then((response) => {
-
+      debugger
         link.likeCount = response.data;
       })
       .catch((error) => {
@@ -156,7 +163,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: start;
-  display: none;
+  //display: none;
 }
 
 /*列表*/
