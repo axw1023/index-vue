@@ -28,11 +28,14 @@
         </tbody>
       </table>
     </div>
-    <div class="random-div">
-      <button @click="openAddModal">随机</button>
-    </div>
     <div class="edit-div">
       <button @click="openAddModal">新增</button>
+      <div class="random-div">
+        <button @click="randomShow">随机</button>
+      </div>
+      <div class="noRandom-div">
+        <button @click="noRandomShow">不随机</button>
+      </div>
     </div>
     <!-- 新增弹窗 -->
     <div v-if="showAddModal" class="modal">
@@ -90,29 +93,49 @@ export default {
       this.items = response.data.records;
       this.loading = false;
     })
-    .catch((error) => {
-      console.error(error);
-    });
+        .catch((error) => {
+          console.error(error);
+        });
   },
   methods: {
     // 点赞
     addLikeCount(link) {
       addLikeCount(link.id).then((response) => {
-      debugger
+        debugger
         link.likeCount = response.data;
       })
-      .catch((error) => {
-        if (error.response && error.response.status === 403) {
-          // Display popup with "重复提交" message
-          alert("重复提交");
-        }
-      });
+          .catch((error) => {
+            if (error.response && error.response.status === 403) {
+              // Display popup with "重复提交" message
+              alert("重复提交");
+            }
+          });
     },
     // 点踩
     addDisLikeCount(link) {
       disLikeCount(link.id).then((response) => {
         link.dislikeCount = response.data;
       })
+    },
+    //随机展示
+    randomShow() {
+      fetchLinkList({fnSubjectId: this.fnSubjectId, isRandom: 1}).then((response) => {
+        this.items = response.data.records;
+        this.loading = false;
+      })
+          .catch((error) => {
+            console.error(error);
+          });
+    },
+    //不随机展示
+    noRandomShow() {
+      fetchLinkList({fnSubjectId: this.fnSubjectId}).then((response) => {
+        this.items = response.data.records;
+        this.loading = false;
+      })
+          .catch((error) => {
+            console.error(error);
+          });
     },
     //弹窗
     openAddModal() {
@@ -163,7 +186,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: start;
-  //display: none;
+//display: none;
 }
 
 /*列表*/

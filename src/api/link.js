@@ -15,9 +15,7 @@ export function fetchSubjectList() {
 // 链接列表
 export function fetchLinkList(params) {
   return axios.get(`${BASE_URL}/link/list`, {
-    params: {
-      fnSubjectId: params.fnSubjectId,
-    },
+    params: params
   });
 }
 
