@@ -69,7 +69,7 @@
 import {addLikeCount, addLink, disLikeCount, fetchLinkList} from "../api/link";
 
 export default {
-  name: "Link",
+  name: 'Link',
   data() {
     return {
       fnSubjectId: '',
@@ -92,21 +92,18 @@ export default {
     fetchLinkList({fnSubjectId: this.fnSubjectId}).then((response) => {
       this.items = response.data.records;
       this.loading = false;
-    })
-        .catch((error) => {
-          console.error(error);
-        });
+    }).catch((error) => {
+      console.error(error);
+    });
   },
   methods: {
     // 点赞
     addLikeCount(link) {
       addLikeCount(link.id).then((response) => {
-        debugger
         link.likeCount = response.data;
       })
           .catch((error) => {
             if (error.response && error.response.status === 403) {
-              // Display popup with "重复提交" message
               alert("重复提交");
             }
           });

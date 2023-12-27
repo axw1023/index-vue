@@ -20,27 +20,38 @@ export default {
   data() {
     return {
       items: [],
-      loading: true,
-      introduction: true,
       //一行2列数据
       columns: 2,
     };
   },
+
   created() {
-    fetchSubjectList().then((response) => {
-      this.items = response.data.records;
-      this.loading = false;
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+    this.fetchData();
   },
+
   methods: {
+    //获取Subject列表数据
+    fetchData(parentId) {
+      fetchSubjectList({parentId: parentId}).then((response) => {
+        this.items = response.data.records;
+      })
+          .catch((error) => {
+            console.error(error);
+          });
+    },
+    //通过路由获取Link列表数据
     goToDetail(subject) {
-      this.introduction = false;
-      this.$router.push({name: "Link", params: {fnSubjectId: subject.id},query:{fnSubjectName:subject.subjectName}});
+      //刷新分组
+      this.fetchData(subject.idStr);
+      //刷新详情
+      this.$router.push({
+        name: 'Link',
+        params: {fnSubjectId: subject.idStr},
+        query: {fnSubjectName: subject.subjectName}
+      });
     }
   },
+
   computed: {
     //按columns分组，达到换行效果
     chunks() {
@@ -58,6 +69,7 @@ export default {
 .subject-main-div {
   overflow: auto;
 }
+
 .subject-main-div td {
   padding: 5px; /* 调整单元格的水平边距 */
 }

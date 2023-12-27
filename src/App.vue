@@ -1,57 +1,32 @@
 <template>
   <div class="app-main-div">
     <div class="logo">
-      <router-link to="/">Go to Home</router-link>
+      <a @click="goToHome">首页</a>
     </div>
-    <div class="subject-div">
-      <Subject/>
-    </div>
-    <div class="link-div">
-      <!--key变化时都会重新加载组件，并且不会产生缓存的问题-->
-      <router-view :key="$route.fullPath" name="mainPage"></router-view>
+    <!--内容div-->
+    <div class="content-div">
+      <Home/>
     </div>
   </div>
 </template>
 
 <script>
-import Subject from "./components/Subject.vue";
+import Home from "./components/Home.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    Subject
+    Home
   },
+  /*首页*/
+  methods: {
+    goToHome() {
+      this.$router.push({path: '/'}).then(() => {
+        /*刷新：<Home/>的原因，路由跳转后不刷新，添加router-link ：key会导致二次渲染，因此在这强制刷新一下*/
+        location.reload();
+      });
+    }
+  }
 };
 </script>
 
-<style>
-.subject-div {
-  background-color: #86908A;
-  width: 20vw;
-  height: 100vh;
-  float: left;
-  display: flex;
-  justify-content: center; /*使用 flex 布局,水平居中对齐*/
-}
-
-.link-div {
-  background-color: #33a25f;
-  width: 70vw;
-  height: 100vh;
-  float: left;
-  display: flex;
-  position: relative; /*设置元素定位为相对定位，实现左右两个 div 可以各自上下滚动互不影响的效果。*/
-}
-
-/* 隐藏滚动条 */
-::-webkit-scrollbar {
-  display: none;
-}
-
-/* 隐藏页面滚动条,使整个页面不滚动 */
-body, html {
-  overflow: hidden;
-}
-
-
-</style>

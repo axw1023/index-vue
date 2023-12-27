@@ -1,29 +1,24 @@
 import {createRouter, createWebHistory} from 'vue-router';
 import Link from "../components/Link.vue";
-import Introduction from "../components/Introduction.vue";
+import Home from "../components/Home.vue";
 // 导入其他页面组件
 
 const routes = [
-  {
-    path: '/',
-    name: 'Introduction',
-    components: {
-      mainPage: Introduction
-    }
-  },
-  {
-    path: '/link/:fnSubjectId',
-    name: 'Link',
-    components: {
-      mainPage: Link
-    }
-  },
-  // 添加其他页面路由配置
+    {
+        path: '/',
+        name: 'Home',
+        component: Home,
+    },
+    {
+        path: '/link/:fnSubjectId',
+        name: 'Link',
+        component: Link
+    },
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes
+    history: createWebHistory(),
+    routes
 });
 
 export default router;
