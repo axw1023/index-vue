@@ -16,7 +16,6 @@
 import {fetchSubjectList} from "../api/link";
 
 export default {
-  name: "Subject",
   data() {
     return {
       items: [],
@@ -62,6 +61,15 @@ export default {
       return result
     },
   },
+
+  watch: {
+    /*返回首页，组件监控不到变化，不会重新渲染，需要监控*/
+    $route: function () {
+      if (this.$route.path == '/') {
+        this.fetchData();
+      }
+    }
+  }
 }
 </script>
 

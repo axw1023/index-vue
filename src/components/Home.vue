@@ -10,28 +10,11 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import Introduction from "./Introduction.vue";
 import Subject from "./Subject.vue";
 import Link from "./Link.vue";
 
-export default {
-  name: "Home",
-  computed: {
-    Link() {
-      return Link
-    },
-    Introduction() {
-      return Introduction
-    }
-  },
-  components: {
-    Introduction,
-    Subject
-  },
-  created() {
-  }
-};
 </script>
 
 <style>
