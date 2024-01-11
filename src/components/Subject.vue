@@ -9,68 +9,71 @@
       </tr>
       </tbody>
     </table>
+    <div v-if="loading" class="loading-indicator">
+      <n-spin size="large" stroke="red"/>
+    </div>
   </div>
 </template>
 
-<script>
+<script setup>
 import {fetchSubjectList} from "../api/link";
+import {ref, watch, watchEffect} from "vue";
+import {useRoute, useRouter} from "vue-router";
+import {NSpin} from "naive-ui";
 
-export default {
-  data() {
-    return {
-      items: [],
-      //一行2列数据
-      columns: 2,
-    };
-  },
+const route = useRoute()
+const router = useRouter()
+let loading = ref(false)
+const items = ref(null)
+const chunks = ref(null)
+//一行2列数据
+const columns = 2
 
-  created() {
-    this.fetchData();
-  },
+fetchData()
 
-  methods: {
-    //获取Subject列表数据
-    fetchData(parentId) {
-      fetchSubjectList({parentId: parentId}).then((response) => {
-        this.items = response.data.records;
-      })
-          .catch((error) => {
-            console.error(error);
-          });
-    },
-    //通过路由获取Link列表数据
-    goToDetail(subject) {
-      //刷新分组
-      this.fetchData(subject.idStr);
-      //刷新详情
-      this.$router.push({
-        name: 'Link',
-        params: {fnSubjectId: subject.idStr},
-        query: {fnSubjectName: subject.subjectName}
+//获取Subject列表数据
+function fetchData(parentId) {
+  loading.value = true;
+  fetchSubjectList({parentId: parentId}).then((response) => {
+    items.value = response.data.records;
+    chunks.value = groupItems()
+    loading.value = false;
+  })
+      .catch((error) => {
+        console.error(error)
       });
-    }
-  },
-
-  computed: {
-    //按columns分组，达到换行效果
-    chunks() {
-      const result = []
-      for (let i = 0; i < this.items.length; i += this.columns) {
-        result.push(this.items.slice(i, i + this.columns))
-      }
-      return result
-    },
-  },
-
-  watch: {
-    /*返回首页，组件监控不到变化，不会重新渲染，需要监控*/
-    $route: function () {
-      if (this.$route.path == '/') {
-        this.fetchData();
-      }
-    }
-  }
 }
+
+//   //通过路由获取Link列表数据
+function goToDetail(subject) {
+  //刷新分组
+  fetchData(subject.idStr);
+  //刷新详情
+  router.push({
+    name: 'Link',
+    params: {fnSubjectId: subject.idStr},
+    query: {fnSubjectName: subject.subjectName}
+  });
+}
+
+function groupItems() {
+  const result = []
+  for (let i = 0; i < items.value.length; i += columns) {
+    result.push(items.value.slice(i, i + columns))
+  }
+  return result
+}
+
+/*返回首页，组件监控不到变化，不会重新渲染，需要监控*/
+watch(
+    () => route.path,
+    (path, prePath) => {
+      /*避免重复调用*/
+      if (path == '/' && prePath != null) {
+        fetchData()
+      }
+    }
+)
 </script>
 
 <style scoped>

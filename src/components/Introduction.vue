@@ -2,10 +2,7 @@
   Share your favorites.
 </template>
 
-<script>
-export default {
-  name: "Introduction"
-}
+<script setup>
 </script>
 
 <style scoped>

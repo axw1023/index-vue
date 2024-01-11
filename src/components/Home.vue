@@ -17,6 +17,7 @@ import Link from "./Link.vue";
 
 </script>
 
+<!--全局样式-->
 <style>
 .subject-div {
   background-color: #86908A;
@@ -46,5 +47,13 @@ body, html {
   overflow: hidden;
 }
 
+/*loading*/
+.loading-indicator {
+  position: relative; /*相对定位*/
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000; /* 根据需要调整 */
+}
 
 </style>

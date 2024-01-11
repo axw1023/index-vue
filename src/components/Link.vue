@@ -21,12 +21,15 @@
             {{ link.createTime }}
           </td>
           <td>
-            <button @click="addLikeCount(link)">👍{{ link.likeCount }}</button>
-            <button @click="addDisLikeCount(link)">👎{{ link.dislikeCount }}</button>
+            <button @click="addLike(link)">👍{{ link.likeCount }}</button>
+            <button @click="addDisLike(link)">👎{{ link.dislikeCount }}</button>
           </td>
         </tr>
         </tbody>
       </table>
+      <div v-if="loading" class="loading-indicator">
+        <n-spin size="large" stroke="red"/>
+      </div>
     </div>
     <div class="edit-div">
       <button @click="openAddModal">新增</button>
@@ -65,100 +68,114 @@
   </div>
 </template>
 
-<script>
-import {addLikeCount, addLink, disLikeCount, fetchLinkList} from "../api/link";
+<script setup>
+import {addLikeCount, addLinkAPI, addDislikeCount, fetchLinkList} from "../api/link";
+import {useRoute} from "vue-router";
+import {ref} from "vue";
+import {NSpin} from 'naive-ui'
 
-export default {
-  name: 'Link',
-  data() {
-    return {
-      fnSubjectId: '',
-      fnSubjectName: '',
-      items: [],
-      loading: true,
-      showAddModal: false,
-      newLink: {
-        linkName: '',
-        linkUrl: '',
-        linkExplain: '',
-        fnSubjectId: '',
-      },
-      dialogVisible: false
-    };
-  },
-  created() {
-    this.fnSubjectId = this.$route.params.fnSubjectId;
-    this.fnSubjectName = this.$route.query.fnSubjectName;
-    fetchLinkList({fnSubjectId: this.fnSubjectId}).then((response) => {
-      this.items = response.data.records;
-      this.loading = false;
-    }).catch((error) => {
-      console.error(error);
-    });
-  },
-  methods: {
-    // 点赞
-    addLikeCount(link) {
-      addLikeCount(link.id).then((response) => {
-        link.likeCount = response.data;
-      })
-          .catch((error) => {
-            if (error.response && error.response.status === 403) {
-              alert("重复提交");
-            }
-          });
-    },
-    // 点踩
-    addDisLikeCount(link) {
-      disLikeCount(link.id).then((response) => {
-        link.dislikeCount = response.data;
-      })
-    },
-    //随机展示
-    randomShow() {
-      fetchLinkList({fnSubjectId: this.fnSubjectId, isRandom: 1}).then((response) => {
-        this.items = response.data.records;
-        this.loading = false;
-      })
-          .catch((error) => {
-            console.error(error);
-          });
-    },
-    //不随机展示
-    noRandomShow() {
-      fetchLinkList({fnSubjectId: this.fnSubjectId}).then((response) => {
-        this.items = response.data.records;
-        this.loading = false;
-      })
-          .catch((error) => {
-            console.error(error);
-          });
-    },
-    //弹窗
-    openAddModal() {
-      this.showAddModal = true;
-    },
-    closeAddModal() {
-      this.showAddModal = false;
-    },
-    //新增
-    addLink() {
-      this.newLink.fnSubjectId = this.fnSubjectId;
-      addLink(this.newLink).then((response) => {
-        // 将新项添加到列表中
-        this.items.push(response.data);
-        // 清空表单数据
-        this.newLink = {
-          linkName: '',
-          linkUrl: '',
-          linkExplain: '',
-          fnSubjectId: '',
-        };
-        // 关闭弹窗
-        this.closeAddModal();
+
+const route = useRoute()
+const fnSubjectId = route.params.fnSubjectId;
+const fnSubjectName = route.query.fnSubjectName;
+let items = ref([])
+let loading = ref(false)
+let showAddModal = ref(false)
+let newLink = {
+  linkName: '',
+  linkUrl: '',
+  linkExplain: '',
+  fnSubjectId: '',
+}
+const dialogVisible = false
+
+fetchData()
+
+//获取Link列表数据
+function fetchData() {
+  loading.value = true;
+  fetchLinkList({fnSubjectId: fnSubjectId}).then((response) => {
+    items.value = response.data.records;
+    loading.value = false;
+  }).catch((error) => {
+    console.error(error);
+  });
+}
+
+// 点赞
+function addLike(link) {
+  addLikeCount(link.idStr).then((response) => {
+    link.likeCount = response.data;
+  })
+      .catch((error) => {
+        if (error.response && error.response.status === 403) {
+          alert("重复提交");
+        }
       });
-    },
-  }
+}
+
+// 点踩
+function addDisLike(link) {
+  addDislikeCount(link.idStr).then((response) => {
+    link.dislikeCount = response.data;
+  })
+      .catch((error) => {
+        if (error.response && error.response.status === 403) {
+          alert("重复提交");
+        }
+      });
+}
+
+//随机展示
+function randomShow() {
+  loading.value = true;
+  fetchLinkList({fnSubjectId: fnSubjectId, isRandom: 1}).then((response) => {
+    items.value = response.data.records;
+    loading.value = false;
+  })
+      .catch((error) => {
+        console.error(error);
+      });
+}
+
+//不随机展示
+function noRandomShow() {
+  loading.value = true;
+  fetchLinkList({fnSubjectId: fnSubjectId}).then((response) => {
+    items.value = response.data.records;
+    loading.value = false;
+  })
+      .catch((error) => {
+        console.error(error);
+      });
+}
+
+//打开弹窗
+function openAddModal() {
+  showAddModal.value = true;
+}
+
+//关闭弹窗
+function closeAddModal() {
+  showAddModal.value = false;
+}
+
+//新增
+function addLink() {
+  newLink.fnSubjectId = fnSubjectId;
+  addLinkAPI(newLink).then((response) => {
+    // 将新项添加到列表中
+    items.value = response.data;
+    // 清空表单数据
+    newLink = {
+      linkName: '',
+      linkUrl: '',
+      linkExplain: '',
+      fnSubjectId: '',
+    };
+    // 关闭弹窗
+    closeAddModal();
+  });
 }
 </script>
 

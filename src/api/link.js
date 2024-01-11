@@ -3,7 +3,7 @@ import axios from 'axios';
 const BASE_URL = 'http://localhost:9002';
 
 // 新增
-export function addLink(params) {
+export function addLinkAPI(params) {
     return axios.post(`${BASE_URL}/link/create`, params);
 }
 
@@ -31,7 +31,7 @@ export function addLikeCount(id) {
 }
 
 // 点踩
-export function disLikeCount(id) {
+export function addDislikeCount(id) {
     return axios.get(`${BASE_URL}/like/count/add/dislike`, {
         params: {
             id: id,
