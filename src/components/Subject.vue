@@ -3,7 +3,7 @@
     <table>
       <tbody>
       <tr v-for="(subjectIPage, index) in chunks" :key="index">
-        <td v-for="subject in subjectIPage" :key="subject.id" @click="goToDetail(subject)">
+        <td v-for="subject in subjectIPage" :key="subject.id" @click="goToDetail(subject.idStr)">
           {{ subject.subjectName }}
         </td>
       </tr>
@@ -17,24 +17,27 @@
 
 <script setup>
 import {fetchSubjectList} from "../api/link";
-import {ref, toRef, watch, watchEffect} from "vue";
+import {ref} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import {NSpin} from "naive-ui";
 
+// 路由
 const route = useRoute()
 const router = useRouter()
+const parentId = route.params.fnSubjectId;
+const searchMsg = route.params.searchMsg;
+// loading
 const loading = ref(false)
+// 数据
 const items = ref(null)
-const chunks = ref(null)
-//一行2列数据
+// 分组（一行2列数据）
 const columns = 2
-//查询
-const props = defineProps(['searchMsg'])
+const chunks = ref(null)
 
-fetchData(null, null)
+fetchData()
 
 //获取Subject列表数据
-function fetchData(parentId, searchMsg) {
+function fetchData() {
   loading.value = true;
   fetchSubjectList({parentId: parentId, searchMsg: searchMsg}).then((response) => {
     items.value = response.data.records;
@@ -46,14 +49,12 @@ function fetchData(parentId, searchMsg) {
       });
 }
 
-//通过路由获取Link列表数据
-function goToDetail(subject) {
-  //刷新分组
-  fetchData(subject.idStr);
+//通过路由刷新详情页
+function goToDetail(fnSubjectId) {
   //刷新详情
   router.push({
-    name: 'Link',
-    params: {fnSubjectId: subject.idStr},
+    name: 'Detail',
+    params: {fnSubjectId: fnSubjectId},
   });
 }
 
@@ -65,31 +66,6 @@ function groupItems() {
   return result
 }
 
-/*返回首页，组件监控不到变化，不会重新渲染，需要监控*/
-watch(
-    () => route.path,
-    (path, prePath) => {
-      /*避免重复调用*/
-      if (path == '/' && prePath != null) {
-        fetchData()
-      }
-    }
-)
-/*查询*/
-watch(() => props.searchMsg, () => {
-  /*返回首页*/
-  if (props.searchMsg == null || props.searchMsg == "") {
-    router.push('/')
-  } else {
-    /*查询分组*/
-    fetchData(null, props.searchMsg)
-    /*查询详情*/
-    router.push({
-      name: 'Search',
-      params: {searchMsg: props.searchMsg},
-    });
-  }
-})
 </script>
 
 <style scoped>

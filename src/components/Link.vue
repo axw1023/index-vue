@@ -10,8 +10,11 @@
           <col style="background-color: #a333da;width: 15%">
         </colgroup>
         <tbody>
-        <tr v-for="(link, index) in items">
-          <td>
+        <tr v-for="(link) in items">
+          <td v-if="searchMsg != null && searchMsg != ''" @click="goToDetail(link.fnSubjectIdStr)">
+            🔗 {{ link.linkName }}
+          </td>
+          <td v-else>
             {{ link.linkName }}
           </td>
           <td>
@@ -48,18 +51,22 @@
 </template>
 
 <script setup>
-import {addLikeCount, addLinkAPI, addDislikeCount, fetchLinkList} from "../api/link";
-import {useRoute} from "vue-router";
+import {addLikeCount, addDislikeCount, fetchLinkList} from "../api/link";
+import {useRoute, useRouter} from "vue-router";
 import {ref} from "vue";
 import {NSpin} from 'naive-ui'
 
 
+// 路由
 const route = useRoute()
+const router = useRouter()
 const fnSubjectId = route.params.fnSubjectId;
 const searchMsg = route.params.searchMsg;
-const items = ref([])
+// loading
 const loading = ref(false)
 const dialogVisible = false
+// 数据
+const items = ref([])
 
 fetchData()
 
@@ -71,6 +78,15 @@ function fetchData() {
     loading.value = false;
   }).catch((error) => {
     console.error(error);
+  });
+}
+
+//通过路由刷新详情页
+function goToDetail(fnSubjectId) {
+  //刷新详情
+  router.push({
+    name: 'Detail',
+    params: {fnSubjectId: fnSubjectId},
   });
 }
 

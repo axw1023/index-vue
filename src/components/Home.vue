@@ -5,17 +5,16 @@
         <router-link to="/">首页</router-link>
       </div>
       <div class="search-div">
-        <!--<n-input v-model:value="searchMsg" placeholder="搜索"/>-->
-        <input v-model="searchMsg" placeholder="edit me"/>
+        <input v-model="searchMsg" @change="goToDetail" placeholder="搜索"/>
       </div>
     </div>
     <div class="body-div">
       <div class="subject-div">
-        <Subject :searchMsg="searchMsg"/>
+        <Subject :key="$route.path"/>
       </div>
       <div class="link-div">
         <!--动态组件：根据url切换首页/详情页-->
-        <component :is="$route.path == '/' ? Introduction : Link " :searchMsg="searchMsg" :key="$route.path"></component>
+        <component :is="$route.path == '/' ? Introduction : Link " :key="$route.path"></component>
       </div>
     </div>
     <div class="footer-div">
@@ -27,10 +26,27 @@
 import Introduction from "./Introduction.vue";
 import Subject from "./Subject.vue";
 import Link from "./Link.vue";
-import {NInput} from "naive-ui";
-import {ref, watch} from "vue";
+import {ref} from "vue";
+import {useRouter} from "vue-router";
 
+// 路由
+const router = useRouter()
+// 查询
 const searchMsg = ref(null)
+
+// 通过路由刷新详情页
+function goToDetail() {
+  // 返回首页
+  if (searchMsg.value == null || searchMsg.value == "") {
+    router.push('/')
+  } else {
+    // 刷新详情
+    router.push({
+      name: 'Search',
+      params: {searchMsg: searchMsg.value},
+    });
+  }
+}
 
 </script>
 
