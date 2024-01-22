@@ -1,11 +1,24 @@
 <template>
-  <div class="app-main-div">
-    <div class="subject-div">
-      <Subject/>
+  <div class="home-div">
+    <div class="header-div">
+      <div class="logo-div">
+        <router-link to="/">首页</router-link>
+      </div>
+      <div class="search-div">
+        <!--<n-input v-model:value="searchMsg" placeholder="搜索"/>-->
+        <input v-model="searchMsg" placeholder="edit me"/>
+      </div>
     </div>
-    <div class="link-div">
-      <!--动态组件：根据url切换首页/详情页-->
-      <component :is="$route.path == '/' ? Introduction : Link"></component>
+    <div class="body-div">
+      <div class="subject-div">
+        <Subject :searchMsg="searchMsg"/>
+      </div>
+      <div class="link-div">
+        <!--动态组件：根据url切换首页/详情页-->
+        <component :is="$route.path == '/' ? Introduction : Link " :searchMsg="searchMsg" :key="$route.path"></component>
+      </div>
+    </div>
+    <div class="footer-div">
     </div>
   </div>
 </template>
@@ -14,11 +27,32 @@
 import Introduction from "./Introduction.vue";
 import Subject from "./Subject.vue";
 import Link from "./Link.vue";
+import {NInput} from "naive-ui";
+import {ref, watch} from "vue";
+
+const searchMsg = ref(null)
 
 </script>
 
 <!--全局样式-->
 <style>
+.home-div {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.header-div {
+  display: flex;
+  justify-content: space-between;
+}
+
+.body-div {
+}
+
+.footer-div {
+}
+
 .subject-div {
   background-color: #86908A;
   width: 20vw;

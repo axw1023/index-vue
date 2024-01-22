@@ -17,24 +17,26 @@
 
 <script setup>
 import {fetchSubjectList} from "../api/link";
-import {ref, watch, watchEffect} from "vue";
+import {ref, toRef, watch, watchEffect} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import {NSpin} from "naive-ui";
 
 const route = useRoute()
 const router = useRouter()
-let loading = ref(false)
+const loading = ref(false)
 const items = ref(null)
 const chunks = ref(null)
 //一行2列数据
 const columns = 2
+//查询
+const props = defineProps(['searchMsg'])
 
-fetchData()
+fetchData(null, null)
 
 //获取Subject列表数据
-function fetchData(parentId) {
+function fetchData(parentId, searchMsg) {
   loading.value = true;
-  fetchSubjectList({parentId: parentId}).then((response) => {
+  fetchSubjectList({parentId: parentId, searchMsg: searchMsg}).then((response) => {
     items.value = response.data.records;
     chunks.value = groupItems()
     loading.value = false;
@@ -44,7 +46,7 @@ function fetchData(parentId) {
       });
 }
 
-//   //通过路由获取Link列表数据
+//通过路由获取Link列表数据
 function goToDetail(subject) {
   //刷新分组
   fetchData(subject.idStr);
@@ -52,7 +54,6 @@ function goToDetail(subject) {
   router.push({
     name: 'Link',
     params: {fnSubjectId: subject.idStr},
-    query: {fnSubjectName: subject.subjectName}
   });
 }
 
@@ -74,6 +75,21 @@ watch(
       }
     }
 )
+/*查询*/
+watch(() => props.searchMsg, () => {
+  /*返回首页*/
+  if (props.searchMsg == null || props.searchMsg == "") {
+    router.push('/')
+  } else {
+    /*查询分组*/
+    fetchData(null, props.searchMsg)
+    /*查询详情*/
+    router.push({
+      name: 'Search',
+      params: {searchMsg: props.searchMsg},
+    });
+  }
+})
 </script>
 
 <style scoped>

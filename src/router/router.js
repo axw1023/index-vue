@@ -17,6 +17,11 @@ const routes = [
         name: 'Link',
         component: Link
     },
+    {
+        path: '/search/:searchMsg',
+        name: 'Search',
+        component: Link
+    },
 ];
 
 const router = createRouter({
