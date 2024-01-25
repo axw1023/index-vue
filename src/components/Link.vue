@@ -11,7 +11,7 @@
         </colgroup>
         <tbody>
         <tr v-for="(link) in items">
-          <td v-if="searchMsg != null && searchMsg != ''" @click="goToDetail(link.fnSubjectIdStr)">
+          <td v-if="searchMsg != null && searchMsg !== ''" @click="goToDetail(link.fnSubjectIdStr)">
             🔗 {{ link.linkName }}
           </td>
           <td v-else>
@@ -24,8 +24,11 @@
             {{ link.createTime }}
           </td>
           <td>
-            <button @click="addLike(link)">👍{{ link.likeCount }}</button>
-            <button @click="addDisLike(link)">👎{{ link.dislikeCount }}</button>
+            <n-button :disabled="link.likeIsChecked" size="tiny" @click="addLike(link)">👍{{ link.likeCount }}</n-button>
+            <n-button :disabled="link.dislikeIsChecked" size="tiny" @click="addDisLike(link)">👎{{
+                link.dislikeCount
+              }}
+            </n-button>
           </td>
         </tr>
         </tbody>
@@ -34,27 +37,23 @@
         <n-spin v-if="loading" size="large" stroke="red"/>
       </div>
     </div>
-    <div class="edit-div">
+    <div class="edit-div" v-show="searchMsg == null || searchMsg === ''">
       <div class="random-div">
-        <button @click="randomShow">随机</button>
+        <n-button size="tiny" @click="randomShow">随机</n-button>
       </div>
       <div class="noRandom-div">
-        <button @click="noRandomShow">不随机</button>
+        <n-button size="tiny" @click="noRandomShow">不随机</n-button>
       </div>
-    </div>
-    <!-- 重复点击弹窗-->
-    <div>
-      <el-dialog :visible="dialogVisible">
-      </el-dialog>
     </div>
   </div>
 </template>
 
 <script setup>
-import {addLikeCount, addDislikeCount, fetchLinkList} from "../api/link";
+import {addLikeCount, addDislikeCount, fetchLinkList} from "@/api/link";
 import {useRoute, useRouter} from "vue-router";
 import {ref} from "vue";
 import {NSpin} from 'naive-ui'
+import {NButton} from 'naive-ui'
 
 
 // 路由
@@ -64,7 +63,6 @@ const fnSubjectId = route.params.fnSubjectId;
 const searchMsg = route.params.searchMsg;
 // loading
 const loading = ref(false)
-const dialogVisible = false
 // 数据
 const items = ref([])
 
@@ -92,24 +90,27 @@ function goToDetail(fnSubjectId) {
 
 // 点赞
 function addLike(link) {
+  //置为不可点击
+  link.likeIsChecked = true;
+
   addLikeCount(link.idStr).then((response) => {
     link.likeCount = response.data;
   })
       .catch((error) => {
         if (error.response && error.response.status === 403) {
-          //todo 按钮变灰
         }
       });
 }
 
 // 点踩
 function addDisLike(link) {
+  link.dislikeIsChecked = true;
+
   addDislikeCount(link.idStr).then((response) => {
     link.dislikeCount = response.data;
   })
       .catch((error) => {
         if (error.response && error.response.status === 403) {
-          //todo 按钮变灰
         }
       });
 }
