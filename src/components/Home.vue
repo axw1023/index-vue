@@ -9,12 +9,9 @@
       </div>
     </div>
     <div class="body-div">
-      <div class="subject-div">
-        <Subject :key="$route.path"/>
-      </div>
       <div class="link-div">
-        <!--动态组件：根据url切换首页/详情页-->
-        <component :is="$route.path == '/' ? Introduction : Link " :key="$route.path"></component>
+        <!--强制刷新-->
+        <Link :key="$route.path"/>
       </div>
     </div>
     <div class="footer-div">
@@ -24,7 +21,6 @@
 
 <script setup>
 import Introduction from "./Introduction.vue";
-import Subject from "./Subject.vue";
 import Link from "./Link.vue";
 import {ref} from "vue";
 import {useRouter} from "vue-router";
@@ -64,18 +60,17 @@ function goToDetail() {
 }
 
 .body-div {
+  /* 使用flex布局 */
+  display: flex;
+  /* 水平居中 */
+  justify-content: center;
+  /* 垂直居中 */
+  align-items: center;
+  /* 确保容器至少占满整个视口高度 */
+  min-height: 100vh;
 }
 
 .footer-div {
-}
-
-.subject-div {
-  background-color: #86908A;
-  width: 20vw;
-  height: 100vh;
-  float: left;
-  display: flex;
-  justify-content: center; /*使用 flex 布局,水平居中对齐*/
 }
 
 .link-div {

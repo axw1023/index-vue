@@ -18,6 +18,18 @@
             {{ link.linkName }}
           </td>
           <td>
+                <n-button
+                    v-for="(subject) in link.subjectList"
+                    class="subject-tag"
+                    size="tiny"
+                    type="success"
+                    round
+                    @click="goToDetail(subject.idStr)"
+                >
+                  {{ subject.subjectName }}
+                </n-button>
+          </td>
+          <td>
             <a :href="link.linkUrl" target="_blank">{{ link.linkUrl }}</a>
           </td>
           <td>
@@ -161,7 +173,7 @@ function noRandomShow() {
   display: flex;
   justify-content: center;
   align-items: start;
-//display: none;
+  /*display: none;*/
 }
 
 /*列表*/
