@@ -4,10 +4,10 @@
     <div class="table-div">
       <table>
         <colgroup>
-          <col style="background-color: #b0a070;width: 25%">
-          <col style="background-color: #1ba6a6;width: 40%">
-          <col style="background-color: #39a61b;width: 20%">
-          <col style="background-color: #a333da;width: 15%">
+          <col style="background-color: #ffffff;width: 40%">
+          <col style="background-color: #ffffff;width: 27%">
+          <col style="background-color: #ffffff;width: 20%">
+          <col style="background-color: #ffffff;width: 13%">
         </colgroup>
         <tbody>
         <tr v-for="(link) in items">
@@ -32,9 +32,9 @@
           <td>
             <a :href="link.linkUrl" target="_blank">{{ link.linkUrl }}</a>
           </td>
-          <td>
-            {{ link.createTime }}
-          </td>
+          <!--<td>-->
+          <!--  {{ link.createTime }}-->
+          <!--</td>-->
           <td>
             <n-button :disabled="link.likeIsChecked" size="tiny" @click="addLike(link)">👍{{ link.likeCount }}</n-button>
             <n-button :disabled="link.dislikeIsChecked" size="tiny" @click="addDisLike(link)">👎{{
@@ -50,12 +50,12 @@
       </div>
     </div>
     <div class="edit-div" v-show="searchMsg == null || searchMsg === ''">
-      <div class="random-div">
-        <n-button size="tiny" @click="randomShow">随机</n-button>
-      </div>
-      <div class="noRandom-div">
-        <n-button size="tiny" @click="noRandomShow">不随机</n-button>
-      </div>
+      <!--<div class="random-div">-->
+      <!--  <n-button size="tiny" @click="randomShow">随机</n-button>-->
+      <!--</div>-->
+      <!--<div class="noRandom-div">-->
+      <!--  <n-button size="tiny" @click="noRandomShow">不随机</n-button>-->
+      <!--</div>-->
     </div>
   </div>
 </template>

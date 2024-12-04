@@ -2,10 +2,10 @@
   <div class="home-div">
     <div class="header-div">
       <div class="logo-div">
-        <router-link to="/">首页</router-link>
+        <router-link to="/">Home</router-link>
       </div>
       <div class="search-div">
-        <input v-model="searchMsg" @change="goToDetail" placeholder="搜索"/>
+        <input v-model="searchMsg" @change="goToDetail" placeholder="Search"/>
       </div>
     </div>
     <div class="body-div">
@@ -56,7 +56,7 @@ function goToDetail() {
 
 .header-div {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 
 .body-div {
@@ -74,8 +74,8 @@ function goToDetail() {
 }
 
 .link-div {
-  background-color: #33a25f;
-  width: 70vw;
+  background-color: #ffffff;
+  width: 80vw;
   height: 100vh;
   float: left;
   display: flex;
