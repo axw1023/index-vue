@@ -185,11 +185,11 @@ table {
   width: 100%;
 }
 
-td {
-  border: 1px solid #ddd;
-  padding: 5px;
 
-  text-align: center;
+th, td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid rgba(221, 221, 221, 0.5);
   overflow: hidden; /*溢出文字隐藏*/
   text-overflow: ellipsis; /*溢出文字省略号*/
 }

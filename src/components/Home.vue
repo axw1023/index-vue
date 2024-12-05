@@ -52,11 +52,13 @@ function goToDetail() {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
+  padding: 20px; /* 添加整体内边距 */
 }
 
 .header-div {
   display: flex;
   justify-content: space-around;
+  padding: 20px 0; /* 添加上下内边距 */
 }
 
 .body-div {
