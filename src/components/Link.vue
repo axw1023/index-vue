@@ -11,33 +11,30 @@
         </colgroup>
         <tbody>
         <tr v-for="(link) in items">
-          <td v-if="searchMsg != null && searchMsg !== ''" @click="goToDetail(link.fnSubjectIdStr)">
-            🔗 {{ link.linkName }}
-          </td>
-          <td v-else>
+          <td>
             {{ link.linkName }}
           </td>
           <td>
-                <n-button
-                    v-for="(subject) in link.subjectList"
-                    class="subject-tag"
-                    size="tiny"
-                    type="success"
-                    round
-                    @click="goToDetail(subject.idStr)"
-                >
-                  {{ subject.subjectName }}
-                </n-button>
+            <n-button
+                color="#26bda4"
+                v-for="(subject) in link.subjectList"
+                class="subject-tag"
+                size="tiny"
+                round
+                @click="goToDetail(subject.idStr)"
+            >
+              {{ subject.subjectName }}
+            </n-button>
           </td>
           <td>
-            <a :href="link.linkUrl" target="_blank">{{ link.linkUrl }}</a>
+            <a style="color: black" :href="link.linkUrl" target="_blank" class="styled-link">{{ link.linkUrl }}</a>
           </td>
           <!--<td>-->
           <!--  {{ link.createTime }}-->
           <!--</td>-->
           <td>
-            <n-button :disabled="link.likeIsChecked" size="tiny" @click="addLike(link)">👍{{ link.likeCount }}</n-button>
-            <n-button :disabled="link.dislikeIsChecked" size="tiny" @click="addDisLike(link)">👎{{
+            <n-button :bordered="false" :disabled="link.likeIsChecked" size="tiny" @click="addLike(link)"><img src="/FaceSatisfied.svg" class="face-icon"/>{{ link.likeCount }}</n-button>
+            <n-button :bordered="false" :disabled="link.dislikeIsChecked" size="tiny" @click="addDisLike(link)"><img src="/FaceDissatisfied.svg" class="face-icon"/>{{
                 link.dislikeCount
               }}
             </n-button>
@@ -48,14 +45,6 @@
       <div v-if="loading" class="loading-indicator">
         <n-spin v-if="loading" size="large" stroke="red"/>
       </div>
-    </div>
-    <div class="edit-div" v-show="searchMsg == null || searchMsg === ''">
-      <!--<div class="random-div">-->
-      <!--  <n-button size="tiny" @click="randomShow">随机</n-button>-->
-      <!--</div>-->
-      <!--<div class="noRandom-div">-->
-      <!--  <n-button size="tiny" @click="noRandomShow">不随机</n-button>-->
-      <!--</div>-->
     </div>
   </div>
 </template>
@@ -167,15 +156,6 @@ function noRandomShow() {
   flex: 0 0 70%; /*父div70%宽度*/
 }
 
-.edit-div {
-  flex: 0 0 15%;
-  /*上方居中*/
-  display: flex;
-  justify-content: center;
-  align-items: start;
-  /*display: none;*/
-}
-
 /*列表*/
 table {
   border-collapse: collapse; /*共享单元格*/
@@ -187,7 +167,7 @@ table {
 
 
 th, td {
-  padding: 12px;
+  padding: 8px;
   text-align: left;
   border-bottom: 1px solid rgba(221, 221, 221, 0.5);
   overflow: hidden; /*溢出文字隐藏*/
@@ -208,6 +188,20 @@ form button {
 
 table button {
   margin-left: 10px;
+}
+
+.styled-link {
+  text-decoration: none; /* 去掉下划线 */
+}
+
+.styled-link:hover {
+  text-decoration: underline; /* 悬停时添加下划线 */
+  color: #0056b3; /* 悬停时颜色变化 */
+}
+
+.face-icon {
+  width: 24px; /* 图标宽度 */
+  height: 24px; /* 图标高度 */
 }
 
 </style>

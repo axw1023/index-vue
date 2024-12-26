@@ -1,12 +1,7 @@
 <template>
   <div class="home-div">
     <div class="header-div">
-      <div class="logo-div">
-        <router-link to="/">Home</router-link>
-      </div>
-      <div class="search-div">
-        <input v-model="searchMsg" @change="goToDetail" placeholder="Search"/>
-      </div>
+      <TopBar/>
     </div>
     <div class="body-div">
       <div class="link-div">
@@ -20,45 +15,25 @@
 </template>
 
 <script setup>
-import Introduction from "./Introduction.vue";
 import Link from "./Link.vue";
-import {ref} from "vue";
-import {useRouter} from "vue-router";
+import TopBar from "./TopBar.vue";
 
-// 路由
-const router = useRouter()
-// 查询
-const searchMsg = ref(null)
 
-// 通过路由刷新详情页
-function goToDetail() {
-  // 返回首页
-  if (searchMsg.value == null || searchMsg.value == "") {
-    router.push('/')
-  } else {
-    // 刷新详情
-    router.push({
-      name: 'Search',
-      params: {searchMsg: searchMsg.value},
-    });
-  }
-}
 
 </script>
 
 <!--全局样式-->
-<style>
+<style scoped>
 .home-div {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
-  padding: 20px; /* 添加整体内边距 */
+  padding: 10px; /* 添加整体内边距 */
 }
 
 .header-div {
   display: flex;
-  justify-content: space-around;
-  padding: 20px 0; /* 添加上下内边距 */
+  justify-content: center;
 }
 
 .body-div {
@@ -77,7 +52,6 @@ function goToDetail() {
 
 .link-div {
   background-color: #ffffff;
-  width: 80vw;
   height: 100vh;
   float: left;
   display: flex;
